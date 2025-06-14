@@ -89,7 +89,7 @@ export async function getTransactionsSummaryByUserId(req, res) {
     res.status(200).json({
       balance: balanceResult[0].balance,
       income: incomeResult[0].income,
-      expense: expenseResult[0].expense
+      expense: expenseResult[0].expenses
     })
 
   } catch (error) {
