@@ -1,0 +1,27 @@
+import express from "express";
+import dotenv from "dotenv";
+import { initDB } from "./config/db.js";
+import ratelimiter from "./middleware/rateLimiter.js";
+import transactionsRoute from './routes/transactionsRoute.js'
+
+dotenv.config()
+
+const app = express();
+
+// middleware
+app.use(ratelimiter)
+app.use(express.json())
+
+app.get("/health", (req, res) => {
+  res.send("API is healthy");
+})
+
+app.use("/api/transactions", transactionsRoute)
+
+// we are starting server only if database initialized
+// after this, in neon db table will get created
+initDB().then(() => {
+  app.listen(process.env.PORT || 5001, () => {
+    console.log("Server is up and running on PORT: ", process.env.PORT || 5001);
+  });
+})
